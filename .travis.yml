@@ -1,3 +1,4 @@
-lenguage: node
-node_js: 
-	-  "node"
+language: node_js
+node_js:
+  - "4.1"
+  - "node"
