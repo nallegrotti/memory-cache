@@ -1,19 +1,26 @@
-var promisify = require('promisify-methods'),
-    timestamp = Date.now();
+var promisify = require('promisify-methods');
+
+var seconds = 1000, 
+	minutes = 60*seconds, 
+	hours = 60*minutes, 
+	days = 60*hours;
 
 var memoryCache = {
 	storage: {},
-	write: function(key, calculateValue, expiresIn) {
+	write: function(key, calculateValue, expiresInMillis) {
 		calculateValue = calculateValue || function(){ return null };
-		expiresIn = expiresIn || timestamp + 28800000;
+		expiresInMillis = expiresInMillis || 8*hours;
 		this.storage[key] = {
 			value: calculateValue(), 
-			expires: expiresIn
+			expires: Date.now() + expiresInMillis
 		};
 	},
-	read: function(key, missedSet, expiresIn) {
-		if ((!this.storage[key]) || (this.storage[key].expires < timestamp)) this.write(key, missedSet, expiresIn);
-		    return this.storage[key].value;
+	read: function(key, missedSet, expiresInMillis) {
+		if ((!this.storage[key]) || (this.storage[key].expires < Date.now())) {
+			this.write(key, missedSet, expiresInMillis);	
+		}
+		
+		return this.storage[key].value;
 	}
 };
 
