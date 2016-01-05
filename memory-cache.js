@@ -12,7 +12,7 @@ var memoryCache = {
 		};
 	},
 	read: function(key, missedSet, expiresIn) {
-		if ((!this.storage[key]) || (this.storage[key].expires < new Date())) this.write(key, missedSet, expiresIn);
+		if ((!this.storage[key]) || (this.storage[key].expires < timestamp)) this.write(key, missedSet, expiresIn);
 		    return this.storage[key].value;
 	}
 };
